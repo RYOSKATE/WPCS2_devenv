@@ -1,0 +1,17 @@
+- hosts: localhost
+  connection: local
+  become: yes
+  tasks:
+    - name: Install git
+      apt:
+        name: git
+
+    - name: Check if ruby is installed
+      stat:
+        path: /usr/local/bin/ruby
+      register: chk_ruby
+
+    - include: ruby.yml
+      when: not chk_ruby.stat.exists
+
+    - include: rails.yml

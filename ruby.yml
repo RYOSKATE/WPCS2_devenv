@@ -1,0 +1,25 @@
+- name: Get ruby source
+  get_url:
+    url: https://cache.ruby-lang.org/pub/ruby/2.4/ruby-2.4.0.tar.gz
+    dest: /root/ruby-2.4.0.tar.gz
+
+- name: Extract ruby source
+  unarchive:
+    src: /root/ruby-2.4.0.tar.gz
+    dest: /root/ruby-2.4.0
+    remote_src: yes
+
+- name: Configure ruby
+  shell: ./configure
+  args:
+    chdir: /root/ruby-2.4.0
+
+- name: Compile ruby
+  shell: make
+  args:
+    chdir: /root/ruby-2.4.0
+
+- name: Install ruby
+  shell: make install
+  args:
+    chdir: /root/ruby-2.4.0
