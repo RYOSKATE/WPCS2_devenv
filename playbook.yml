@@ -17,7 +17,7 @@
 #        path: /usr/local/bin/ruby
 #      register: chk_ruby
 #
-#    - include: ruby.yml
+    - include: ruby.yml
 #      when: not chk_ruby.stat.exists
 #
 #    - include: rails.yml

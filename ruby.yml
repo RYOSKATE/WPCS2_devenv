@@ -1,25 +1,59 @@
-- name: Get ruby source
-  get_url:
-    url: https://cache.ruby-lang.org/pub/ruby/2.4/ruby-2.4.0.tar.gz
-    dest: /root/ruby-2.4.0.tar.gz
+- name: Get rbenv from GitHub
+  git:
+    repo: https://github.com/rbenv/rbenv.git
+    dest: /root/.rbenv
 
-- name: Extract ruby source
-  unarchive:
-    src: /root/ruby-2.4.0.tar.gz
-    dest: /root/ruby-2.4.0
-    remote_src: yes
-
-- name: Configure ruby
+- name: Configure rbenv
   shell: ./configure
   args:
-    chdir: /root/ruby-2.4.0
+    chdir: /root/.rbenv/src
 
-- name: Compile ruby
-  shell: make
+- name: make rbenv
+  shell: make -C src
   args:
-    chdir: /root/ruby-2.4.0
+    chdir: /root/.rbenv
+
+- name: Update PATH
+  lineinfile:
+    state: present
+    dest: /root/.bashrc
+    line: 'export PATH="$HOME/.rbenv/bin:$PATH" && eval "$(rbenv init -)"'
+
+- name: Update PATH2
+  lineinfile:
+    state: present
+    dest: /root/.bashrc
+    line: 'PATH="`ruby -e "puts Gem.user_dir"`/bin:$PATH"'
+
+- name: Get ruby-build from GitHub
+  git:
+    repo: https://github.com/rbenv/ruby-build.git
+    dest: /root/.rbenv/plugins/ruby-build
+
+- name: Install libreadline-dev
+  apt:
+    name: libreadline-dev
+
+- name: Check if ruby is installed
+  shell: /root/.rbenv/bin/rbenv versions | grep 2.4.0
+  args:
+    chdir: /root
+  register: ruby_install_status
 
 - name: Install ruby
-  shell: make install
+  shell: /root/.rbenv/bin/rbenv install 2.4.0
   args:
-    chdir: /root/ruby-2.4.0
+    chdir: /root
+  when: ruby_install_status.rc == 1
+
+- name: set rbenv
+  shell: /root/.rbenv/bin/rbenv global 2.4.0
+  args:
+    chdir: /root
+
+- gem:
+    name: rails
+    state: present
+    executable: /root/.rbenv/shims/gem
+
+
