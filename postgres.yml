@@ -4,9 +4,11 @@
     - postgresql
     - libpq-dev
     - python-psycopg2
+  become: yes
 
 - name: start postgresql
   service: name=postgresql state=started  enabled=yes
+  become: yes
 
 - name : create database
   postgresql_db: 

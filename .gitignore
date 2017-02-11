@@ -1,4 +1,4 @@
 .vagrant/*
 *.swp
-WPCS2/*
+WPCS2
 *.retry

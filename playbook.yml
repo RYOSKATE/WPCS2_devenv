@@ -1,6 +1,5 @@
 - hosts: localhost
   connection: local
-  become: yes
   vars:
     dbuser: "testuser"
     dbpass: "badpasss"
@@ -9,6 +8,7 @@
     - name: Install git
       apt:
         name: git
+      become: yes
 
     - include: postgres.yml
 

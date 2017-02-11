@@ -1,3 +1,8 @@
+- name: Remove system default ruby
+  apt:
+    name: ruby
+    state: absent
+
 - name: Get rbenv from GitHub
   git:
     repo: https://github.com/rbenv/rbenv.git
@@ -31,19 +36,28 @@
     repo: https://github.com/rbenv/ruby-build.git
     dest: /opt/rbenv/plugins/ruby-build
 
-- name: Install libreadline-dev
-  apt:
-    name: libreadline-dev
 
 - name: Install ruby
   shell: export RBENV_ROOT="/opt/rbenv"; /opt/rbenv/bin/rbenv install -s 2.4.0
   become: yes
-  become_user: root
+
+- name: Create link from /usr/bin/ruby
+  file:
+    src: /opt/rbenv/shims/ruby
+    dest: /usr/bin/ruby
+    state: link
+  become: yes
+
+- name: Create link from /usr/bin/gem
+  file:
+    src: /opt/rbenv/shims/gem
+    dest: /usr/bin/gem
+    state: link
+  become: yes
 
 - name: Set rbenv
   shell: export RBENV_ROOT="/opt/rbenv"; /opt/rbenv/bin/rbenv global 2.4.0
   become: yes
-  become_user: root
 
 - name: Update PATH for gem
   lineinfile:
@@ -51,9 +65,10 @@
     dest: /etc/bash.bashrc
     line: 'PATH="`ruby -e "puts Gem.user_dir"`/bin:$PATH"'
 
-- gem: Install rails
-    name: rails
-    state: present
-    executable: /opt/rbenv/shims/gem
-
+- name: Install gems
+  gem: name={{item}} state=present executable=/opt/rbenv/shims/gem
+  with_items:
+    - rails
+    - railties
+    - bundler
 
