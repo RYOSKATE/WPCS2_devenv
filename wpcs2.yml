@@ -1,0 +1,21 @@
+- name : create database for wpcs2
+  postgresql_db: 
+    name: "{{item}}"
+    encoding: "UTF-8"
+    login_user: postgres
+  with_items:
+    - wpcs2_development
+    - wpcs2_test
+    - wpcs2_production
+  become_user: postgres
+  become: yes
+
+- name: create user
+  postgresql_user: 
+    name: "wpcs2"
+    password: "ThisIsOnly4T3st"
+    role_attr_flags: CREATEDB,NOSUPERUSER
+    state: present
+    login_user: postgres
+  become_user: postgres
+  become: yes

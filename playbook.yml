@@ -13,3 +13,5 @@
     - include: postgres.yml
     - include: ruby.yml
     - include: nodejs.yml
+    - include: wpcs2.yml
+    - include: on_vagrant.yml
