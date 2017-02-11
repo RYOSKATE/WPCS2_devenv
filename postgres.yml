@@ -13,8 +13,8 @@
     name: "{{ dbname }}"
     encoding: "UTF-8"
     login_user: postgres
-  sudo_user: postgres
-  sudo: yes
+  become_user: postgres
+  become: yes
 
 - name: create user
   postgresql_user: 
@@ -24,5 +24,5 @@
     priv: ALL
     state: present
     login_user: postgres
-  sudo_user: postgres
-  sudo: yes
+  become_user: postgres
+  become: yes
