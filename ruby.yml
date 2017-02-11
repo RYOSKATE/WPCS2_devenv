@@ -1,60 +1,59 @@
 - name: Get rbenv from GitHub
   git:
     repo: https://github.com/rbenv/rbenv.git
-    dest: /root/.rbenv
+    dest: /opt/rbenv
 
 - name: Configure rbenv
   shell: ./configure
   args:
-    chdir: /root/.rbenv/src
+    chdir: /opt/rbenv/src
 
-- name: make rbenv
+- name: Make rbenv
   shell: make -C src
   args:
-    chdir: /root/.rbenv
+    chdir: /opt/rbenv
 
-- name: Update PATH
+- name: Add RBENV_ROOT
+  lineinfile:
+    create: yes
+    state: present
+    dest: /etc/bash.bashrc
+    line: 'export RBENV_ROOT="/opt/rbenv"'
+
+- name: Update PATH for rbenv
   lineinfile:
     state: present
-    dest: /root/.bashrc
-    line: 'export PATH="$HOME/.rbenv/bin:$PATH" && eval "$(rbenv init -)"'
-
-- name: Update PATH2
-  lineinfile:
-    state: present
-    dest: /root/.bashrc
-    line: 'PATH="`ruby -e "puts Gem.user_dir"`/bin:$PATH"'
+    dest: /etc/bash.bashrc
+    line: 'export PATH="/opt/rbenv/bin:$PATH" && eval "$(rbenv init -)"'
 
 - name: Get ruby-build from GitHub
   git:
     repo: https://github.com/rbenv/ruby-build.git
-    dest: /root/.rbenv/plugins/ruby-build
+    dest: /opt/rbenv/plugins/ruby-build
 
 - name: Install libreadline-dev
   apt:
     name: libreadline-dev
 
-- name: Check if ruby is installed
-  shell: ls /root/.rbenv/versions/ | grep 2.4.0
-  register: ruby_install_status
+- name: Install ruby
+  shell: export RBENV_ROOT="/opt/rbenv"; /opt/rbenv/bin/rbenv install -s 2.4.0
   become: yes
   become_user: root
-  failed_when: ruby_install_status.rc not in [0, 1]
 
-- name: Install ruby
-  shell: /root/.rbenv/bin/rbenv install 2.4.0
-  args:
-    chdir: /root
-  when: ruby_install_status.rc == 1
+- name: Set rbenv
+  shell: export RBENV_ROOT="/opt/rbenv"; /opt/rbenv/bin/rbenv global 2.4.0
+  become: yes
+  become_user: root
 
-#- name: set rbenv
-#  shell: /root/.rbenv/bin/rbenv global 2.4.0
-#  args:
-#    chdir: /root
+- name: Update PATH for gem
+  lineinfile:
+    state: present
+    dest: /etc/bash.bashrc
+    line: 'PATH="`ruby -e "puts Gem.user_dir"`/bin:$PATH"'
 
-#- gem:
-#    name: rails
-#    state: present
-#    executable: /root/.rbenv/shims/gem
+- gem: Install rails
+    name: rails
+    state: present
+    executable: /opt/rbenv/shims/gem
 
 
