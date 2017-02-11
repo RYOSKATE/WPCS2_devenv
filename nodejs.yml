@@ -1,0 +1,23 @@
+- name: Install nodejs
+  apt:
+    name: nodejs
+
+- name: Install npm
+  apt:
+    name: npm
+
+- name: Install n globally
+  npm:
+    name: n
+    global: yes
+
+- name: Install latest stable nodejs
+  shell: n stable
+  become: yes
+
+- name: Create link from /usr/bin/node
+  file:
+    src: /usr/local/bin/node
+    dest: /usr/bin/node
+    state: link
+  become: yes

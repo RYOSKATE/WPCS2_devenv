@@ -15,12 +15,14 @@ vagrant ssh
 
 Before the setting up, you need to install Ansible.
 ```
-./init.sh
+/vagrant/init.sh
 ```
 
 Finally, run Ansible.
 ```
 sudo ansible-playbook -i /vagrant/develop /vagrant/playbook.yml 
 ```
+
+You have to logout / login to the box again for applying changes on `~/.bashrc`.
 
 Happy developing!

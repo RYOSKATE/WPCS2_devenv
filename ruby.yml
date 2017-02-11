@@ -36,6 +36,10 @@
     repo: https://github.com/rbenv/ruby-build.git
     dest: /opt/rbenv/plugins/ruby-build
 
+- name: Install ruby dependency
+  apt:
+    name: libreadline-dev
+    state: present
 
 - name: Install ruby
   shell: export RBENV_ROOT="/opt/rbenv"; /opt/rbenv/bin/rbenv install -s 2.4.0
