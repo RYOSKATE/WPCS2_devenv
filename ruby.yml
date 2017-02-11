@@ -35,10 +35,11 @@
     name: libreadline-dev
 
 - name: Check if ruby is installed
-  shell: /root/.rbenv/bin/rbenv versions | grep 2.4.0
-  args:
-    chdir: /root
+  shell: ls /root/.rbenv/versions/ | grep 2.4.0
   register: ruby_install_status
+  become: yes
+  become_user: root
+  failed_when: ruby_install_status.rc not in [0, 1]
 
 - name: Install ruby
   shell: /root/.rbenv/bin/rbenv install 2.4.0
@@ -46,14 +47,14 @@
     chdir: /root
   when: ruby_install_status.rc == 1
 
-- name: set rbenv
-  shell: /root/.rbenv/bin/rbenv global 2.4.0
-  args:
-    chdir: /root
+#- name: set rbenv
+#  shell: /root/.rbenv/bin/rbenv global 2.4.0
+#  args:
+#    chdir: /root
 
-- gem:
-    name: rails
-    state: present
-    executable: /root/.rbenv/shims/gem
+#- gem:
+#    name: rails
+#    state: present
+#    executable: /root/.rbenv/shims/gem
 
 
