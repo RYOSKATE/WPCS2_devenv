@@ -61,5 +61,9 @@ You have to logout / login to the box again for applying changes on `~/.bashrc`.
  rails server
  ```
 
+1. Access to the app on your browser
+ * [http://localhost:3000/](http://localhost:3000/)
+ * You can change the port number by editing Vagrantfile
+
 Happy developing!
 
