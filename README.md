@@ -53,7 +53,7 @@ You have to logout / login to the box again for applying changes on `~/.bashrc`.
 
  ```
  npm install
- npm install typescript
+ sudo npm install typescript
  ```
  
 1. Serve the app
