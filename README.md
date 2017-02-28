@@ -40,7 +40,7 @@ You have to logout / login to the box again for applying changes on `~/.bashrc`.
 1. cd to WPCS2 directory
 
  ```
- cd vagrant/WPCS2
+ cd /vagrant/WPCS2
  ```
  
 1. Install gems
