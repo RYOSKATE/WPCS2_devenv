@@ -17,7 +17,9 @@ vagrant ssh
 
 Before the setting up, you need to install Ansible.
 ```
-/vagrant/init.sh
+sudo add-apt-repository ppa:ansible/ansible
+sudo apt update
+sudo apt install -y ansible
 ```
 
 Finally, run Ansible.
@@ -46,21 +48,21 @@ You have to logout / login to the box again for applying changes on `~/.bashrc`.
 1. Install gems
 
  ```
- bundler install
+ mkdir -p ~/WPCS2/vendor/bundle
+ bundle install --path ~/WPCS2/vendor/bundle
  ```
  
 1. Install node packages
 
  ```
- npm install
- sudo npm install typescript
+ npm install –no-bin-links
  ```
  
 1. Serve the app
 
  ```
  rake db:migrate
- rails server
+ bundle exec rails s -b 0.0.0.0
  ```
 
 1. Access to the app on your browser
