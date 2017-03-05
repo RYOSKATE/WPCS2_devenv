@@ -51,11 +51,15 @@ You have to logout / login to the box again for applying changes on `~/.bashrc`.
  mkdir -p ~/WPCS2/vendor/bundle
  bundle install --path ~/WPCS2/vendor/bundle
  ```
+ (option)
+ ```
+ sudo apt install graphviz
+ ```
  
 1. Install node packages
 
  ```
- npm install –no-bin-links
+ npm install -no-bin-links
  ```
  
 1. Serve the app
